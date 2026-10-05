@@ -7,11 +7,6 @@ const mongoose = require("mongoose");
 const app = express();
 const PORT = process.env.PORT || process.argv[2] || 3000;
 
-if (process.argv.length !== 3) {
-  console.log("Usage: node coffeeServer.js PORT_NUMBER");
-  process.exit(1);
-}
-
 const uri = process.env.MONGO_CONNECTION_STRING;
 
 app.set("views", path.resolve(__dirname, "views"));
