@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Notes - Brew Journal</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="/style.css">
+
+</head>
+
+<body>
+  <nav>
+    <a href="/" class="nav-logo">Brew Journal</a>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/notes/new">Add Note</a></li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <div class="header-row">
+      <h1 class="page-title">My Tasting Notes</h1>
+    </div>
+
+    <% if (notes.length===0) { %>
+      <p class="empty-state">Your journal is empty. Time to go taste some coffee!</p>
+      <% } else { %>
+        <div class="grid">
+          <% notes.forEach(note=> { %>
+            <div class="note-card">
+              <div class="note-header">
+                <span class="stars">
+                  <% for(let i=0; i < note.rating; i++) { %>★<% } %>
+                </span>
+                <span class="date">
+                  <%= new Date(note.dateTried).toLocaleDateString() %>
+                </span>
+              </div>
+              <h3>
+                <%= note.coffeeName %>
+              </h3>
+              <p>
+                <%= note.flavorNotes %>
+              </p>
+
+              <form action="/notes/<%= note._id %>/delete" method="POST">
+                <button type="submit" class="delete-btn">Delete Note</button>
+              </form>
+            </div>
+            <% }) %>
+        </div>
+        <% } %>
+  </div>
+</body>
+
+</html>

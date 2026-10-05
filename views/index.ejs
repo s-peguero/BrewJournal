@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Brew Journal</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="/style.css">
+
+</head>
+
+<body>
+
+  <nav>
+    <span class="nav-logo">Brew Journal</span>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/notes">My Notes</a></li>
+      <li><a href="/notes/new">Add Note</a></li>
+    </ul>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-left">
+      <p class="hero-tag">Your Personal Coffee Companion</p>
+      <h1 class="hero-title">Track every<br /><em>sip</em> you love.</h1>
+      <p class="hero-desc">
+        Explore the Starbucks drink catalog, discover new favorites, and keep
+        a personal journal of your tasting notes — all in one place.
+      </p>
+      <div class="btn-group">
+        <a href="/notes/new" class="btn btn-primary">Add a Tasting Note</a>
+        <a href="/notes" class="btn btn-outline">View My Notes</a>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <p class="search-label">Explore Drinks</p>
+      <h2 class="search-title">Find your next<br />favorite brew</h2>
+
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Search by name e.g. mocha…" />
+        <button onclick="searchByName()">Search</button>
+      </div>
+
+      <p class="category-label">Browse by Category</p>
+      <div class="categories">
+        <button class="cat-btn" onclick="searchByCategory('HOT BEVERAGES')">Hot Beverages</button>
+        <button class="cat-btn" onclick="searchByCategory('ICED BEVERAGES')">Iced Beverages</button>
+        <button class="cat-btn" onclick="searchByCategory('ADD-INS')">Add-Ins</button>
+        <button class="cat-btn" onclick="searchByCategory('SYRUPS')">Syrups</button>
+        <button class="cat-btn" onclick="searchByCategory('FOOD')">Food</button>
+      </div>
+
+      <div id="results"></div>
+    </div>
+  </section>
+
+  <div class="stats-bar">
+    <div class="stat">
+      <span class="stat-num">5</span>
+      <p class="stat-desc">Drink categories to explore</p>
+    </div>
+    <div class="stat">
+      <span class="stat-num">∞</span>
+      <p class="stat-desc">Flavor combinations to discover</p>
+    </div>
+    <div class="stat">
+      <span class="stat-num">1</span>
+      <p class="stat-desc">Place to keep all your notes</p>
+    </div>
+  </div>
+
+  <script>
+    async function searchByName() {
+      const name = document.getElementById("searchInput").value.trim();
+      if (!name) return;
+      showLoading();
+      try {
+        const res = await fetch(`/coffee/search?name=${encodeURIComponent(name)}`);
+        const data = await res.json();
+        renderResults(data);
+      } catch (e) { showError(); }
+    }
+
+    async function searchByCategory(category) {
+      showLoading();
+      try {
+        const res = await fetch(`/coffee/category?category=${encodeURIComponent(category)}`);
+        const data = await res.json();
+        renderResults(data);
+      } catch (e) { showError(); }
+    }
+
+    function renderResults(data) {
+      const box = document.getElementById("results");
+      const drinks = Array.isArray(data) ? data : (data.drinks || data.data || []);
+      if (!drinks.length) {
+        box.innerHTML = `<p class="error-msg">No drinks found.</p>`;
+        return;
+      }
+      box.innerHTML = drinks.slice(0, 4).map(d => `
+        <div class="result-card">
+          <h4>${d.name || d.title || "Unknown Drink"}</h4>
+          <p>${d.category || ""}${d.description ? " — " + d.description.slice(0, 80) + "…" : ""}</p>
+        </div>
+      `).join("");
+    }
+
+    function showLoading() {
+      document.getElementById("results").innerHTML = `<p class="loading">Fetching drinks…</p>`;
+    }
+
+    function showError() {
+      document.getElementById("results").innerHTML = `<p class="error-msg">Something went wrong. Try again.</p>`;
+    }
+
+    document.getElementById("searchInput").addEventListener("keydown", (e) => {
+      if (e.key === "Enter") searchByName();
+    });
+  </script>
+
+</body>
+
+</html>

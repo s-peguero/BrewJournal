@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Add Note - Brew Journal</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="/style.css">
+
+
+</head>
+
+<body>
+  <nav>
+    <a href="/" class="nav-logo">Brew Journal</a>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/notes">My Notes</a></li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <h1 class="page-title">Log a Tasting</h1>
+    <p class="page-desc">Record your thoughts on a recent brew.</p>
+
+    <form action="/notes" method="POST">
+      <div class="form-group">
+        <label for="coffeeName">Coffee Name</label>
+        <input type="text" id="coffeeName" name="coffeeName" class="form-control" placeholder="e.g. Iced Caffè Mocha"
+          required>
+      </div>
+
+      <div class="form-group">
+        <label for="rating">Rating (1-5)</label>
+        <select id="rating" name="rating" class="form-control" required>
+          <option value="5">⭐⭐⭐⭐⭐ - Perfection</option>
+          <option value="4">⭐⭐⭐⭐ - Great</option>
+          <option value="3">⭐⭐⭐ - Good</option>
+          <option value="2">⭐⭐ - Not my favorite</option>
+          <option value="1">⭐ - Avoid</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="dateTried">Date Tried</label>
+        <input type="date" id="dateTried" name="dateTried" class="form-control" required>
+      </div>
+
+      <div class="form-group">
+        <label for="flavorNotes">Flavor Notes</label>
+        <textarea id="flavorNotes" name="flavorNotes" class="form-control" rows="4"
+          placeholder="Describe the aroma, acidity, and overall taste..." required></textarea>
+      </div>
+
+      <button type="submit" class="btn">Save to Journal</button>
+    </form>
+  </div>
+</body>
+
+</html>
